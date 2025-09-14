@@ -54,12 +54,28 @@ spring.datasource.password=your_password
 1. Get YouTube Data API v3 key from [Google Cloud Console](https://console.cloud.google.com/)
 2. Get Google OAuth2 credentials from [Google Cloud Console](https://console.cloud.google.com/)
 
-3. Set environment variables or update `application.properties`:
+3. Set environment variables (recommended for security):
 ```bash
+# Windows (PowerShell)
+$env:GOOGLE_CLIENT_ID="your_google_client_id"
+$env:GOOGLE_CLIENT_SECRET="your_google_client_secret"
+$env:YOUTUBE_API_KEY="your_youtube_api_key"
+$env:DB_PASSWORD="your_mysql_password"
+
+# Windows (Command Prompt)
+set GOOGLE_CLIENT_ID=your_google_client_id
+set GOOGLE_CLIENT_SECRET=your_google_client_secret
+set YOUTUBE_API_KEY=your_youtube_api_key
+set DB_PASSWORD=your_mysql_password
+
+# Linux/Mac
 export GOOGLE_CLIENT_ID=your_google_client_id
 export GOOGLE_CLIENT_SECRET=your_google_client_secret
 export YOUTUBE_API_KEY=your_youtube_api_key
+export DB_PASSWORD=your_mysql_password
 ```
+
+**⚠️ SECURITY WARNING:** Never commit real API keys to version control!
 
 ### 3. Backend Setup
 

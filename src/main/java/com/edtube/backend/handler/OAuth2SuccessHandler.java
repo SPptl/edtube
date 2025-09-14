@@ -15,25 +15,30 @@ import java.io.IOException;
 
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                      Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication) throws IOException, ServletException {
+
+        System.out.println("OAuth2SuccessHandler called!");
         
         OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-        
+
         String googleId = oauth2User.getAttribute("sub");
         String email = oauth2User.getAttribute("email");
         String name = oauth2User.getAttribute("name");
         String pictureUrl = oauth2User.getAttribute("picture");
-        
+
+        System.out.println("User: " + name + " (" + email + ")");
+
         // Create or update user in database
         User user = userService.findOrCreateUser(googleId, email, name, pictureUrl);
-        
-        // Redirect to frontend with user info
-        getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000?user=" + user.getGoogleId());
+
+        // Redirect to frontend
+        System.out.println("Redirecting to frontend...");
+        response.sendRedirect("http://localhost:3000");
     }
 }
