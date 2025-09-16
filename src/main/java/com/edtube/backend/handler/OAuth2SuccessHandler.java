@@ -1,0 +1,45 @@
+package com.edtube.backend.handler;
+
+import com.edtube.backend.entity.User;
+import com.edtube.backend.service.UserService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+
+@Component
+public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
+    @Autowired
+    private UserService userService;
+
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
+
+        System.out.println("OAuth2SuccessHandler called!");
+        
+        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+
+    // Use 'sub' for Google user ID (not 'id')
+    String googleId = oauth2User.getAttribute("sub");
+    String email = oauth2User.getAttribute("email");
+    String name = oauth2User.getAttribute("name");
+    String pictureUrl = oauth2User.getAttribute("picture");
+
+        System.out.println("User: " + name + " (" + email + ")");
+
+        // Create or update user in database
+        User user = userService.findOrCreateUser(googleId, email, name, pictureUrl);
+
+        // Redirect to frontend
+        System.out.println("Redirecting to frontend...");
+        response.sendRedirect("http://localhost:3000");
+    }
+}
