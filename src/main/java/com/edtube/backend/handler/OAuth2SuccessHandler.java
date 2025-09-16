@@ -27,10 +27,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         
         OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
 
-        String googleId = oauth2User.getAttribute("sub");
-        String email = oauth2User.getAttribute("email");
-        String name = oauth2User.getAttribute("name");
-        String pictureUrl = oauth2User.getAttribute("picture");
+    // Use 'sub' for Google user ID (not 'id')
+    String googleId = oauth2User.getAttribute("sub");
+    String email = oauth2User.getAttribute("email");
+    String name = oauth2User.getAttribute("name");
+    String pictureUrl = oauth2User.getAttribute("picture");
 
         System.out.println("User: " + name + " (" + email + ")");
 
