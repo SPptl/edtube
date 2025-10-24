@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import { getPlaylistById, getPlaylistVideos } from '../services/api';
 import './Playlist.css';
 
 const Playlist = () => {
   const { playlistId } = useParams();
-  const navigate = useNavigate();
   const [playlist, setPlaylist] = useState(null);
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
