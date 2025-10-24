@@ -1,17 +1,17 @@
-# edtube
+# EdTube - YouTube Clone Application
 
-A modern educational video platform powered by YouTube API, built with Java Spring Boot and React.
+A modern, full-stack YouTube clone application built with Spring Boot and React that uses the YouTube Data API to fetch and display videos.
 
-## 🎯 Features
+## Features
 
-- **Educational Content Only** - Filters videos by YouTube's Education category
-- **Search Videos & Playlists** - Dual search modes with toggle button
-- **Playlist Viewer** - Browse playlist videos within the app
-- **Modern UI** - Purple gradient theme with glassmorphism effects
-- **Video Player** - Embedded YouTube player with video details
-- **Responsive Design** - Works on desktop, tablet, and mobile
+- 🎥 Browse trending videos
+- 🔍 Search for videos
+- ▶️ Watch videos with embedded YouTube player
+- 📱 Responsive, modern UI design
+- 🎨 Dark theme interface
+- ⚡ Fast and fluid user experience
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend
 - Java 17
@@ -23,60 +23,48 @@ A modern educational video platform powered by YouTube API, built with Java Spri
 - React 18
 - React Router v6
 - Axios
-- Modern CSS with Gradients
+- Modern CSS
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Java 17 or higher
-- Node.js 16+ and npm
-- Maven 3.6+
+- Node.js 16 or higher
+- Maven 3.6 or higher
 - YouTube Data API Key
 
-## 🚀 Setup Instructions
+## Setup Instructions
 
-### 1. Clone the repository
+### 1. Get YouTube API Key
 
-```bash
-git clone https://github.com/yourusername/edtube.git
-cd edtube
-```
-
-### 2. Get YouTube API Key
-
-1. Go to [Google Cloud Console](https://console.developers.google.com/)
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a new project or select an existing one
-3. Enable **YouTube Data API v3**
+3. Enable YouTube Data API v3
 4. Create credentials (API Key)
 5. Copy your API key
 
-### 3. Backend Setup
+### 2. Backend Setup
 
-1. Navigate to backend resources:
+1. Navigate to the backend directory:
    ```bash
-   cd backend/src/main/resources
+   cd backend
    ```
 
-2. Copy the example properties file:
-   ```bash
-   cp application.properties.example application.properties
-   ```
-
-3. Edit `application.properties` and add your API key:
+2. Open `src/main/resources/application.properties` and replace `YOUR_API_KEY_HERE` with your actual YouTube API key:
    ```properties
-   youtube.api.key=YOUR_YOUTUBE_API_KEY_HERE
+   youtube.api.key=YOUR_ACTUAL_API_KEY
    ```
 
-4. Build and run the backend:
+3. Build and run the Spring Boot application:
    ```bash
-   cd ../../..  # Back to backend folder
+   mvn clean install
    mvn spring-boot:run
    ```
 
-   Backend will start on `http://localhost:8080`
+   The backend will start on `http://localhost:8080`
 
-### 4. Frontend Setup
+### 3. Frontend Setup
 
-1. Navigate to frontend directory:
+1. Navigate to the frontend directory:
    ```bash
    cd frontend
    ```
@@ -91,9 +79,17 @@ cd edtube
    npm start
    ```
 
-   Frontend will start on `http://localhost:3000`
+   The frontend will start on `http://localhost:3000`
 
-## 📁 Project Structure
+## Usage
+
+1. Open your browser and go to `http://localhost:3000`
+2. Browse trending videos on the home page
+3. Use the search bar to find specific videos
+4. Click on any video to watch it
+5. View related videos on the video player page
+
+## Project Structure
 
 ```
 edtube/
@@ -101,84 +97,50 @@ edtube/
 │   ├── src/
 │   │   └── main/
 │   │       ├── java/com/edtube/
-│   │       │   ├── config/         # CORS configuration
-│   │       │   ├── controller/     # REST controllers
-│   │       │   ├── model/          # Data models (VideoItem, PlaylistItem)
-│   │       │   ├── service/        # YouTube API service
-│   │       │   └── EdTubeApplication.java
+│   │       │   ├── EdTubeApplication.java
+│   │       │   ├── config/
+│   │       │   │   └── CorsConfig.java
+│   │       │   ├── controller/
+│   │       │   │   └── VideoController.java
+│   │       │   ├── model/
+│   │       │   │   └── VideoItem.java
+│   │       │   └── service/
+│   │       │       └── YoutubeService.java
 │   │       └── resources/
-│   │           ├── application.properties.example
-│   │           └── application.properties (excluded from git)
+│   │           └── application.properties
 │   └── pom.xml
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── components/     # Reusable components (Navbar, VideoCard, PlaylistCard)
-│   │   ├── pages/          # Page components (Home, Search, VideoPlayer, Playlist)
-│   │   ├── services/       # API services
-│   │   └── App.js
-│   └── package.json
-└── README.md
+│
+└── frontend/
+    ├── public/
+    │   └── index.html
+    ├── src/
+    │   ├── components/
+    │   │   ├── Navbar.js
+    │   │   ├── VideoCard.js
+    │   │   └── VideoGrid.js
+    │   ├── pages/
+    │   │   ├── Home.js
+    │   │   ├── Search.js
+    │   │   └── VideoPlayer.js
+    │   ├── services/
+    │   │   └── api.js
+    │   ├── App.js
+    │   └── index.js
+    └── package.json
 ```
 
-## 🎨 UI Features
+## API Endpoints
 
-- **Navbar** - Search bar with video/playlist mode toggle
-- **Home Page** - Welcome section with popular educational topics
-- **Search Results** - Mixed grid showing videos and playlists (3:1 ratio)
-- **Playlist Page** - Detailed view with all playlist videos
-- **Video Player** - Full-screen embedded player
+- `GET /api/videos/trending?maxResults=20` - Get trending videos
+- `GET /api/videos/search?query=searchTerm&maxResults=20` - Search videos
+- `GET /api/videos/{videoId}` - Get video details by ID
 
-## 🔌 API Endpoints
+## Troubleshooting
 
-### Videos
-- `GET /api/videos/search?query={query}&maxResults={count}` - Search educational videos
-- `GET /api/videos/trending?maxResults={count}` - Get trending educational videos
-- `GET /api/videos/{videoId}` - Get video details
+- **CORS errors**: Make sure the backend is running on port 8080 and frontend on port 3000
+- **API quota exceeded**: YouTube API has daily quota limits. Monitor your usage in Google Cloud Console
+- **Videos not loading**: Check that your API key is correctly set in `application.properties`
 
-### Playlists
-- `GET /api/videos/playlists/search?query={query}&maxResults={count}` - Search playlists
-- `GET /api/videos/playlists/{playlistId}` - Get playlist details
-- `GET /api/videos/playlists/{playlistId}/videos?maxResults={count}` - Get playlist videos
-
-## 🎯 Search Modes
-
-**Video Mode (Default):**
-- Shows educational videos with playlists mixed in (3 videos : 1 playlist ratio)
-
-**Playlist Mode:**
-- Shows only educational playlists
-- Toggle by clicking the button between search input and search button
-
-## 🌈 Design Theme
-
-- **Logo**: "edtube" in lowercase with purple gradient
-- **Colors**: Purple gradient (#667eea → #764ba2 → #f093fb)
-- **Background**: Dark blue-purple gradients
-- **Style**: Modern glassmorphism with backdrop blur effects
-
-## 🔒 Security Notes
-
-- ⚠️ **Never commit `application.properties` with real API keys**
-- ✅ The `.gitignore` file already excludes this file
-- ✅ Use `application.properties.example` as a template
-- 🔄 Rotate API keys immediately if accidentally exposed
-
-## 🐛 Troubleshooting
-
-- **CORS errors**: Ensure backend runs on port 8080 and frontend on port 3000
-- **API quota exceeded**: YouTube API has daily quotas. Monitor usage in Google Cloud Console
-- **Videos not loading**: Verify API key is correctly set in `application.properties`
-- **Backend won't start**: Check that port 8080 is not already in use
-- **Frontend build errors**: Try deleting `node_modules` and running `npm install` again
-
-## 📝 License
+## License
 
 This project is for educational purposes only.
-
-## 🙏 Acknowledgments
-
-- YouTube Data API v3
-- Spring Boot Framework
-- React Community
-- Educational content creators worldwide
