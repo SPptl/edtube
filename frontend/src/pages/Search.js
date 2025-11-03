@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import PlaylistCard from '../components/PlaylistCard';
+import LoadingSkeleton from '../components/LoadingSkeleton';
 import { searchVideos, searchPlaylists } from '../services/api';
 import './Search.css';
 
@@ -76,21 +77,30 @@ const Search = () => {
     <div className="search-page">
       <div className="page-header">
         <h1>Educational {mode === 'playlists' ? 'playlists' : 'content'} for "{query}"</h1>
+        {!loading && mixedContent.length > 0 && (
+          <p className="results-count">{mixedContent.length} results found</p>
+        )}
       </div>
       
-      {loading ? (
-        <div className="loading">Loading...</div>
-      ) : (
-        <div className="content-grid">
-          {mixedContent.map((item, index) => (
+      <div className="content-grid">
+        {loading ? (
+          <LoadingSkeleton count={12} />
+        ) : mixedContent.length === 0 ? (
+          <div className="no-results">
+            <div className="no-results-icon">🔍</div>
+            <h2>No results found</h2>
+            <p>Try searching for something else</p>
+          </div>
+        ) : (
+          mixedContent.map((item, index) => (
             item.type === 'video' ? (
               <VideoCard key={`video-${item.data.videoId}-${index}`} video={item.data} />
             ) : (
               <PlaylistCard key={`playlist-${item.data.playlistId}-${index}`} playlist={item.data} />
             )
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   );
 };
