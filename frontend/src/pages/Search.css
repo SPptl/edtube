@@ -2,6 +2,7 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
   position: relative;
+  animation: fadeIn 0.3s ease;
 }
 
 .search-page::before {
@@ -18,35 +19,25 @@
 }
 
 .page-header {
-  padding: 32px 48px;
+  padding: 32px 48px 24px;
   position: relative;
   z-index: 1;
-  animation: fadeInDown 0.6s ease-out;
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  animation: slideDown 0.4s ease;
 }
 
 .page-header h1 {
-  font-size: 32px;
-  font-weight: 800;
+  font-size: 28px;
+  font-weight: 700;
   color: #ffffff;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   margin-bottom: 8px;
 }
 
 .results-count {
-  font-size: 16px;
+  font-size: 15px;
   color: rgba(255, 255, 255, 0.5);
   font-weight: 500;
+  animation: fadeIn 0.5s ease 0.2s backwards;
 }
 
 .content-grid {
@@ -58,52 +49,102 @@
   z-index: 1;
 }
 
-.no-results {
-  grid-column: 1 / -1;
+/* Empty State */
+.empty-state,
+.error-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
+  min-height: 500px;
+  padding: 60px 24px;
   text-align: center;
-  animation: fadeIn 0.6s ease-out;
+  animation: fadeInUp 0.5s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.no-results-icon {
+.empty-icon,
+.error-icon {
   font-size: 80px;
   margin-bottom: 24px;
-  opacity: 0.3;
+  animation: bounce 1s ease;
 }
 
-.no-results h2 {
+.empty-state h2,
+.error-state h2 {
   font-size: 28px;
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 12px;
 }
 
-.no-results p {
+.empty-state p {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 500px;
+  line-height: 1.6;
 }
 
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-  font-size: 18px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.5);
-  position: relative;
-  z-index: 1;
+.retry-button {
+  margin-top: 24px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
 }
 
+.retry-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Responsive Design */
 @media (max-width: 1400px) {
   .content-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -139,5 +180,15 @@
   
   .content-grid {
     padding: 0 24px 24px;
+  }
+
+  .empty-state h2,
+  .error-state h2 {
+    font-size: 22px;
+  }
+
+  .empty-icon,
+  .error-icon {
+    font-size: 60px;
   }
 }

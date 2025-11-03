@@ -13,6 +13,7 @@ const Search = () => {
   const [videos, setVideos] = useState([]);
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (query) {
@@ -22,6 +23,7 @@ const Search = () => {
 
   const performSearch = async (searchQuery, searchMode) => {
     setLoading(true);
+    setError(null);
     try {
       if (searchMode === 'playlists') {
         // Only fetch playlists
@@ -37,8 +39,9 @@ const Search = () => {
         setVideos(videoData);
         setPlaylists(playlistData);
       }
-    } catch (error) {
-      console.error('Failed to search:', error);
+    } catch (err) {
+      console.error('Failed to search:', err);
+      setError('Failed to load content. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -72,35 +75,46 @@ const Search = () => {
   };
 
   const mixedContent = createMixedContent();
+  const totalResults = mode === 'playlists' ? playlists.length : (videos.length + playlists.length);
 
   return (
     <div className="search-page">
       <div className="page-header">
         <h1>Educational {mode === 'playlists' ? 'playlists' : 'content'} for "{query}"</h1>
-        {!loading && mixedContent.length > 0 && (
-          <p className="results-count">{mixedContent.length} results found</p>
+        {!loading && totalResults > 0 && (
+          <p className="results-count">{totalResults} results found</p>
         )}
       </div>
       
-      <div className="content-grid">
-        {loading ? (
+      {loading ? (
+        <div className="content-grid">
           <LoadingSkeleton count={12} />
-        ) : mixedContent.length === 0 ? (
-          <div className="no-results">
-            <div className="no-results-icon">🔍</div>
-            <h2>No results found</h2>
-            <p>Try searching for something else</p>
-          </div>
-        ) : (
-          mixedContent.map((item, index) => (
+        </div>
+      ) : error ? (
+        <div className="error-state">
+          <div className="error-icon">⚠️</div>
+          <h2>{error}</h2>
+          <button className="retry-button" onClick={() => performSearch(query, mode)}>
+            Try Again
+          </button>
+        </div>
+      ) : totalResults === 0 ? (
+        <div className="empty-state">
+          <div className="empty-icon">🔍</div>
+          <h2>No results found</h2>
+          <p>Try searching for something else or explore popular topics from the home page</p>
+        </div>
+      ) : (
+        <div className="content-grid">
+          {mixedContent.map((item, index) => (
             item.type === 'video' ? (
               <VideoCard key={`video-${item.data.videoId}-${index}`} video={item.data} />
             ) : (
               <PlaylistCard key={`playlist-${item.data.playlistId}-${index}`} playlist={item.data} />
             )
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
